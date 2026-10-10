@@ -6,7 +6,6 @@ Every endpoint the app calls, in the order a user moves through the app, with it
 - **Dropdown fields** take the option **value** from `GET /api/master-data` (for example `never_married`, not "Never Married"). Where a list is long, the table names the master-data key.
 - **`any`** ("Doesn't matter") is accepted only in partner-preference fields, where the table says so.
 - **Errors:** validation failures return `400` with `{ "success": false, "message": "...", "errors": ["..."] }`.
-- Full response samples are in [API-v2.md](API-v2.md); a ready-to-run collection is in [Rishtha-Online-API-v2.postman_collection.json](Rishtha-Online-API-v2.postman_collection.json).
 
 ## Contents
 1. [App launch](#a-app-launch)
