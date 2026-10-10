@@ -6,6 +6,7 @@ Every endpoint the app calls, in the order a user moves through the app, with it
 - **Dropdown fields** take the option **value** from `GET /api/master-data` (for example `never_married`, not "Never Married"). Where a list is long, the table names the master-data key.
 - **`any`** ("Doesn't matter") is accepted only in partner-preference fields, where the table says so.
 - **Errors:** validation failures return `400` with `{ "success": false, "message": "...", "errors": ["..."] }`.
+- Full response samples are in [API-v2.md](API-v2.md); a ready-to-run collection is in [Rishtha-Online-API-v2.postman_collection.json](Rishtha-Online-API-v2.postman_collection.json).
 
 ## Contents
 1. [App launch](#a-app-launch)
@@ -877,7 +878,42 @@ Removes interests, shortlists, photo requests and notifications, hides the profi
 
 Not used by the mobile app. All require an admin token.
 
-### 74. ID proofs to review
+### 74. Dashboard stats
+
+`GET /api/admin/stats` · 🛡 Admin token
+
+_No request fields._
+
+**Returns:** `stats: { users, attention, engagement, signupFunnel, signupsByDay (30 days), recentUsers }`.
+
+### 75. Users (search / filter)
+
+`GET /api/admin/users` · 🛡 Admin token
+
+| Field | Type | Required | Allowed values / rules |
+|---|---|---|---|
+| `q` | Text (query) | No | Name, email, phone digits or profile code |
+| `gender` | Text (query) | No | `male`, `female` |
+| `status` | Text (query) | No | `active`, `hidden`, `deactivated`, `deleted`, `all`. Default: everyone not deleted |
+| `signupStep` | Text (query) | No | `verify_phone`, `personal`, `social`, `preferences`, `photos`, `completed` |
+| `idProof` | Text (query) | No | `pending`, `approved`, `rejected`, `none` |
+| `sortBy` | Text (query) | No | `newest` (default), `lastSeen` |
+| `page` | Integer (query) | No | Default 1 |
+| `limit` | Integer (query) | No | Default 20, max 50 |
+
+**Returns:** `total`, `page`, `items` (summary rows).
+
+### 76. User detail
+
+`GET /api/admin/users/:id` · 🛡 Admin token
+
+| Field | Type | Required | Allowed values / rules |
+|---|---|---|---|
+| `id` | ID (path) | **Yes** | Member `_id` |
+
+**Returns:** Full profile sections (unmasked contact), photos, ID proof review, settings, activity counts, recent reports against the member, and original pre-redesign values.
+
+### 77. ID proofs to review
 
 `GET /api/admin/id-proofs` · 🛡 Admin token
 
@@ -887,7 +923,7 @@ Not used by the mobile app. All require an admin token.
 | `page` | Integer (query) | No | Default 1 |
 | `limit` | Integer (query) | No | Default 20, max 50 |
 
-### 75. Download ID proof file
+### 78. Download ID proof file
 
 `GET /api/admin/id-proofs/:userId/file` · 🛡 Admin token
 
@@ -895,7 +931,7 @@ Not used by the mobile app. All require an admin token.
 |---|---|---|---|
 | `userId` | ID (path) | **Yes** |  |
 
-### 76. Approve / reject ID proof
+### 79. Approve / reject ID proof
 
 `PUT /api/admin/id-proofs/:userId` · 🛡 Admin token
 
@@ -905,7 +941,7 @@ Not used by the mobile app. All require an admin token.
 | `status` | Text | **Yes** | `approved`, `rejected` |
 | `rejectionReason` | Text | **If** `status` is `rejected` | Shown to the user |
 
-### 77. Reports
+### 80. Reports
 
 `GET /api/admin/reports` · 🛡 Admin token
 
@@ -915,7 +951,7 @@ Not used by the mobile app. All require an admin token.
 | `page` | Integer (query) | No | Default 1 |
 | `limit` | Integer (query) | No | Default 20, max 50 |
 
-### 78. Update report
+### 81. Update report
 
 `PUT /api/admin/reports/:id` · 🛡 Admin token
 
@@ -925,7 +961,7 @@ Not used by the mobile app. All require an admin token.
 | `status` | Text | **Yes** | `open`, `reviewed`, `actioned`, `dismissed` |
 | `adminNote` | Text | No |  |
 
-### 79. Support tickets
+### 82. Support tickets
 
 `GET /api/admin/support-tickets` · 🛡 Admin token
 
@@ -935,7 +971,7 @@ Not used by the mobile app. All require an admin token.
 | `page` | Integer (query) | No | Default 1 |
 | `limit` | Integer (query) | No | Default 20, max 50 |
 
-### 80. Update support ticket
+### 83. Update support ticket
 
 `PUT /api/admin/support-tickets/:id` · 🛡 Admin token
 
@@ -945,7 +981,7 @@ Not used by the mobile app. All require an admin token.
 | `status` | Text | **Yes** | `open`, `in_progress`, `closed` |
 | `adminNote` | Text | No |  |
 
-### 81. Create / update static page or app version
+### 84. Create / update static page or app version
 
 `PUT /api/admin/content/:key` · 🛡 Admin token
 
